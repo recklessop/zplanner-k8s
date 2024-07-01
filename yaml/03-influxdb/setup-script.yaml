@@ -29,3 +29,4 @@ data:
 
     # Save the output to a shared volume
     echo ${SETUP_OUTPUT} > /shared/setup_output.json
+    echo "Setup output written to /shared/setup_output.json"
