@@ -12,8 +12,6 @@ spec:
           volumeMounts:
             - name: setup-script
               mountPath: /setup
-            - name: shared-data
-              mountPath: /shared
       volumes:
         - name: setup-script
           configMap:
