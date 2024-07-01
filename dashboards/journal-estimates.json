@@ -1,0 +1,335 @@
+{
+    "annotations": {
+      "list": [
+        {
+          "builtIn": 1,
+          "datasource": {
+            "type": "grafana",
+            "uid": "-- Grafana --"
+          },
+          "enable": true,
+          "hide": true,
+          "iconColor": "rgba(0, 211, 255, 1)",
+          "name": "Annotations & Alerts",
+          "type": "dashboard"
+        }
+      ]
+    },
+    "editable": true,
+    "fiscalYearStartMonth": 0,
+    "graphTooltip": 0,
+    "id": 4,
+    "links": [],
+    "panels": [
+      {
+        "datasource": {
+          "type": "influxdb",
+          "uid": "edo3fuvokhpmod"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "continuous-GrYlRd"
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 80
+                }
+              ]
+            },
+            "unit": "deckbytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 22,
+          "w": 24,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "options": {
+          "displayMode": "basic",
+          "maxVizHeight": 300,
+          "minVizHeight": 16,
+          "minVizWidth": 8,
+          "namePlacement": "auto",
+          "orientation": "horizontal",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showUnfilled": true,
+          "sizing": "auto",
+          "valueMode": "color"
+        },
+        "pluginVersion": "11.1.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "influxdb",
+              "uid": "edo3fuvokhpmod"
+            },
+            "query": "from(bucket: \"zptest\")\n  |> range(start: -${timeRangeDays}, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vm_stats\")\n  |> filter(fn: (r) => r[\"_field\"] == \"kbWriteAvg\")\n  |> filter(fn: (r) => contains(value: r[\"vm\"], set: ${vmname:json}))\n  |> map(fn: (r) => ({ r with _value: r._value * 60.0 }))\n  |> group(columns: [\"disk\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: sum, createEmpty: false)\n  |> sum(column: \"_value\")\n  |> yield(name: \"total_kb_written_per_disk\")",
+            "refId": "A"
+          }
+        ],
+        "title": "Estimated Journal Size",
+        "transformations": [
+          {
+            "id": "labelsToFields",
+            "options": {
+              "valueLabel": "disk"
+            }
+          }
+        ],
+        "type": "bargauge"
+      }
+    ],
+    "refresh": "1m",
+    "schemaVersion": 39,
+    "tags": [],
+    "templating": {
+      "list": [
+        {
+          "allValue": "",
+          "current": {
+            "selected": false,
+            "text": "cmh-linux-1",
+            "value": "cmh-linux-1"
+          },
+          "datasource": {
+            "type": "influxdb",
+            "uid": "edo3fuvokhpmod"
+          },
+          "definition": "from(bucket: \"zptest\")\n  |> range(start: -1y)  // You can adjust the time range as needed\n  |> group(columns: [\"vm\"])\n  |> distinct(column: \"vm\")\n  |> keep(columns: [\"vm\"])",
+          "hide": 0,
+          "includeAll": true,
+          "label": "VM Name",
+          "multi": true,
+          "name": "vmname",
+          "options": [],
+          "query": "from(bucket: \"zptest\")\n  |> range(start: -1y)  // You can adjust the time range as needed\n  |> group(columns: [\"vm\"])\n  |> distinct(column: \"vm\")\n  |> keep(columns: [\"vm\"])",
+          "refresh": 1,
+          "regex": "",
+          "skipUrlSync": false,
+          "sort": 0,
+          "type": "query"
+        },
+        {
+          "current": {
+            "selected": false,
+            "text": "1 hour",
+            "value": "1h"
+          },
+          "hide": 0,
+          "includeAll": false,
+          "label": "Journal Length",
+          "multi": false,
+          "name": "timeRangeDays",
+          "options": [
+            {
+              "selected": true,
+              "text": "1 hour",
+              "value": "1h"
+            },
+            {
+              "selected": false,
+              "text": "2 hours",
+              "value": "2h"
+            },
+            {
+              "selected": false,
+              "text": "4 hours",
+              "value": "4h"
+            },
+            {
+              "selected": false,
+              "text": "6 hours",
+              "value": "6h"
+            },
+            {
+              "selected": false,
+              "text": "12 hours",
+              "value": "12h"
+            },
+            {
+              "selected": false,
+              "text": "1 day",
+              "value": "1d"
+            },
+            {
+              "selected": false,
+              "text": "2 days",
+              "value": "2d"
+            },
+            {
+              "selected": false,
+              "text": "3 days",
+              "value": "3d"
+            },
+            {
+              "selected": false,
+              "text": "4 days",
+              "value": "4d"
+            },
+            {
+              "selected": false,
+              "text": "5 days",
+              "value": "5d"
+            },
+            {
+              "selected": false,
+              "text": "6 days",
+              "value": "6d"
+            },
+            {
+              "selected": false,
+              "text": "7 days",
+              "value": "7d"
+            },
+            {
+              "selected": false,
+              "text": "8 days",
+              "value": "8d"
+            },
+            {
+              "selected": false,
+              "text": "9 days",
+              "value": "9d"
+            },
+            {
+              "selected": false,
+              "text": "10 days",
+              "value": "10d"
+            },
+            {
+              "selected": false,
+              "text": "11 days",
+              "value": "11d"
+            },
+            {
+              "selected": false,
+              "text": "12 days",
+              "value": "12d"
+            },
+            {
+              "selected": false,
+              "text": "13 days",
+              "value": "13d"
+            },
+            {
+              "selected": false,
+              "text": "14 days",
+              "value": "14d"
+            },
+            {
+              "selected": false,
+              "text": "15 days",
+              "value": "15d"
+            },
+            {
+              "selected": false,
+              "text": "16 days",
+              "value": "16d"
+            },
+            {
+              "selected": false,
+              "text": "17 days",
+              "value": "17d"
+            },
+            {
+              "selected": false,
+              "text": "18 days",
+              "value": "18d"
+            },
+            {
+              "selected": false,
+              "text": "19 days",
+              "value": "19d"
+            },
+            {
+              "selected": false,
+              "text": "20 days",
+              "value": "20d"
+            },
+            {
+              "selected": false,
+              "text": "21 days",
+              "value": "21d"
+            },
+            {
+              "selected": false,
+              "text": "22 days",
+              "value": "22d"
+            },
+            {
+              "selected": false,
+              "text": "23 days",
+              "value": "23d"
+            },
+            {
+              "selected": false,
+              "text": "24 days",
+              "value": "24d"
+            },
+            {
+              "selected": false,
+              "text": "25 days",
+              "value": "25d"
+            },
+            {
+              "selected": false,
+              "text": "26 days",
+              "value": "26d"
+            },
+            {
+              "selected": false,
+              "text": "27 days",
+              "value": "27d"
+            },
+            {
+              "selected": false,
+              "text": "28 days",
+              "value": "28d"
+            },
+            {
+              "selected": false,
+              "text": "29 days",
+              "value": "29d"
+            },
+            {
+              "selected": false,
+              "text": "30 days",
+              "value": "30d"
+            }
+          ],
+          "query": "1 hour : 1h, 2 hours : 2h, 4 hours : 4h, 6 hours : 6h, 12 hours : 12h, 1 day : 1d, 2 days : 2d, 3 days : 3d, 4 days : 4d, 5 days : 5d, 6 days : 6d, 7 days : 7d, 8 days : 8d, 9 days : 9d, 10 days : 10d, 11 days : 11d, 12 days : 12d, 13 days : 13d, 14 days : 14d, 15 days : 15d, 16 days : 16d, 17 days : 17d, 18 days : 18d, 19 days : 19d, 20 days : 20d, 21 days : 21d, 22 days : 22d, 23 days : 23d, 24 days : 24d, 25 days : 25d, 26 days : 26d, 27 days : 27d, 28 days : 28d, 29 days : 29d, 30 days : 30d,",
+          "queryValue": "",
+          "skipUrlSync": false,
+          "type": "custom"
+        }
+      ]
+    },
+    "time": {
+      "from": "now-5m",
+      "to": "now"
+    },
+    "timepicker": {},
+    "timezone": "browser",
+    "title": "Journal Estimates",
+    "uid": "fdo483yebsfeob",
+    "version": 10,
+    "weekStart": ""
+  }
