@@ -9,25 +9,31 @@ spec:
         - name: influxdb-setup
           image: influxdb:2.0
           command: ["/bin/bash", "/setup/setup.sh"]
-          env:
-            - name: KUBERNETES_SERVICE_HOST
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.hostIP
-            - name: KUBERNETES_SERVICE_PORT
-              value: "443"
           volumeMounts:
             - name: setup-script
               mountPath: /setup
-            - name: kube-config
-              mountPath: /root/.kube/config
-              subPath: config
+            - name: shared-data
+              mountPath: /setup
+
+        - name: json-parser
+          image: bitnami/minideb
+          command: ["bash", "-c", "apt-get update && apt-get install -y jq && sleep infinity"]
+          volumeMounts:
+            - name: shared-data
+              mountPath: /setup
+
+      restartPolicy: OnFailure
       volumes:
         - name: setup-script
           configMap:
             name: influxdb-setup-script
-        - name: kube-config
-          secret:
-            secretName: kube-config
-      restartPolicy: OnFailure
+        - name: shared-data
+          emptyDir: {}
 
+      initContainers:
+        - name: parse-token
+          image: bitnami/minideb
+          command: ["/bin/bash", "-c", "apt-get update && apt-get install -y jq && TOKEN=$(cat /setup/setup_output.json | jq -r '.auth.token') && echo $TOKEN"]
+          volumeMounts:
+            - name: shared-data
+              mountPath: /setup

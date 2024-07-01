@@ -6,16 +6,16 @@ data:
   setup.sh: |
     #!/bin/bash
     set -e
-    INFLUX_HOST=http://influxdb:8086
-    INFLUXDB_SETUP_USERNAME=zplanner
-    INFLUXDB_SETUP_PASSWORD=zplanner
-    INFLUXDB_SETUP_ORG=zplanner
-    INFLUXDB_SETUP_BUCKET=zplanner
+    INFLUX_HOST=http://localhost:8086
+    INFLUXDB_SETUP_USERNAME=myuser
+    INFLUXDB_SETUP_PASSWORD=mypassword
+    INFLUXDB_SETUP_ORG=default-org
+    INFLUXDB_SETUP_BUCKET=default-bucket
     INFLUXDB_CONFIGMAP_NAME=influxdb-config
 
     while ! curl -s ${INFLUX_HOST}/ping; do
       echo "Waiting for influxdb to be ready..."
-      sleep 30
+      sleep 5
     done
 
     # Run the setup command and capture the output
@@ -27,12 +27,5 @@ data:
                                 --force \
                                 --json)
 
-    # Extract the token from the setup output
-    echo "${SETUP_OUTPUT}"
-    TOKEN=$(echo ${SETUP_OUTPUT} | jq -r '.auth.token')
-    echo "InfluxDB token for user ${INFLUXDB_SETUP_USERNAME}: ${TOKEN}"
-
-    # Update the ConfigMap with the token
-    kubectl patch configmap ${INFLUXDB_CONFIGMAP_NAME} \
-      --type=json \
-      -p="[{\"op\":\"replace\",\"path\":\"/data/INFLUXDB_TOKEN\",\"value\":\"${TOKEN}\"}]"
+    # Save the output to a shared volume
+    echo ${SETUP_OUTPUT} > /setup/setup_output.json
