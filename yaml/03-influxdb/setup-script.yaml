@@ -6,11 +6,11 @@ data:
   setup.sh: |
     #!/bin/bash
     set -e
-    INFLUX_HOST=http://localhost:8086
-    INFLUXDB_SETUP_USERNAME=myuser
-    INFLUXDB_SETUP_PASSWORD=mypassword
-    INFLUXDB_SETUP_ORG=default-org
-    INFLUXDB_SETUP_BUCKET=default-bucket
+    INFLUX_HOST=http://influxdb:8086
+    INFLUXDB_SETUP_USERNAME=zplanner
+    INFLUXDB_SETUP_PASSWORD=zplanner
+    INFLUXDB_SETUP_ORG=zplanner
+    INFLUXDB_SETUP_BUCKET=zplanner
     INFLUXDB_CONFIGMAP_NAME=influxdb-config
 
     while ! curl -s ${INFLUX_HOST}/ping; do
@@ -35,3 +35,4 @@ data:
     kubectl patch configmap ${INFLUXDB_CONFIGMAP_NAME} \
       --type=json \
       -p="[{\"op\":\"replace\",\"path\":\"/data/INFLUXDB_TOKEN\",\"value\":\"${TOKEN}\"}]"
+se
