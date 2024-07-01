@@ -27,4 +27,4 @@ data:
             --token ${INFLUXDB_SETUP_TOKEN} \
             --host ${INFLUX_HOST} \
             --force \
-            --json)
+            --json
