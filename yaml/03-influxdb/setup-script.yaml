@@ -28,4 +28,4 @@ data:
                                 --json)
 
     # Save the output to a shared volume
-    echo ${SETUP_OUTPUT} > /setup/setup_output.json
+    echo ${SETUP_OUTPUT} > /shared/setup_output.json

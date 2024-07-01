@@ -5,6 +5,13 @@ metadata:
 spec:
   template:
     spec:
+      initContainers:
+        - name: parse-token
+          image: bitnami/minideb
+          command: ["/bin/bash", "-c", "apt-get update && apt-get install -y jq && TOKEN=$(cat /shared/setup_output.json | jq -r '.auth.token') && echo $TOKEN > /shared/token.txt"]
+          volumeMounts:
+            - name: shared-data
+              mountPath: /shared
       containers:
         - name: influxdb-setup
           image: influxdb:2.0
@@ -13,27 +20,17 @@ spec:
             - name: setup-script
               mountPath: /setup
             - name: shared-data
-              mountPath: /setup
-
+              mountPath: /shared
         - name: json-parser
           image: bitnami/minideb
-          command: ["bash", "-c", "apt-get update && apt-get install -y jq && sleep infinity"]
+          command: ["sleep", "infinity"]
           volumeMounts:
             - name: shared-data
-              mountPath: /setup
-
-      restartPolicy: OnFailure
+              mountPath: /shared
       volumes:
         - name: setup-script
           configMap:
             name: influxdb-setup-script
         - name: shared-data
           emptyDir: {}
-
-      initContainers:
-        - name: parse-token
-          image: bitnami/minideb
-          command: ["/bin/bash", "-c", "apt-get update && apt-get install -y jq && TOKEN=$(cat /setup/setup_output.json | jq -r '.auth.token') && echo $TOKEN"]
-          volumeMounts:
-            - name: shared-data
-              mountPath: /setup
+      restartPolicy: OnFailure
