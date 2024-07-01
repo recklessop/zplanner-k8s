@@ -35,4 +35,3 @@ data:
     kubectl patch configmap ${INFLUXDB_CONFIGMAP_NAME} \
       --type=json \
       -p="[{\"op\":\"replace\",\"path\":\"/data/INFLUXDB_TOKEN\",\"value\":\"${TOKEN}\"}]"
-se
