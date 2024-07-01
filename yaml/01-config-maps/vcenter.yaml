@@ -5,3 +5,11 @@ metadata:
 data:
   VCENTER_HOST: "192.168.50.50"
   VCENTER_USERNAME: "administrator@vsphere.local"
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vcenter-secret
+type: Opaque
+stringData:
+  VCENTER_PASSWORD: "password"
