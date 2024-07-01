@@ -4,32 +4,26 @@ metadata:
   name: grafana-pv
 spec:
   capacity:
-    storage: 1Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/data/grafana"
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: microk8s-hostpath
+    path: /mnt/data/grafana
+    type: DirectoryOrCreate
 
 ---
-
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: grafana-pvc
-  namespace: zplanner
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
-  volumeName: grafana-pv
-  storageClassName: microk8s-hostpath
+      storage: 10Gi
 
 ---
-
 apiVersion: apps/v1
 kind: Deployment
 metadata:
