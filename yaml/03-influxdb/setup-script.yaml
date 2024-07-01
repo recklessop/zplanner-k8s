@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: influxdb-setup-script
+data:
+  setup.sh: |
+    #!/bin/bash
+    set -e
+    INFLUX_HOST=http://localhost:8086
+    INFLUXDB_SETUP_USERNAME=zplanner
+    INFLUXDB_SETUP_PASSWORD=zplanner
+    INFLUXDB_SETUP_ORG=zplanner
+    INFLUXDB_SETUP_BUCKET=zplanner
+    INFLUXDB_CONFIGMAP_NAME=influxdb-config
+
+    while ! curl -s ${INFLUX_HOST}/ping; do
+      echo "Waiting for influxdb to be ready..."
+      sleep 5
+    done
+
+    influx setup --username ${INFLUXDB_SETUP_USERNAME} \
+                 --password ${INFLUXDB_SETUP_PASSWORD} \
+                 --org ${INFLUXDB_SETUP_ORG} \
+                 --bucket ${INFLUXDB_SETUP_BUCKET} \
+                 --host ${INFLUX_HOST} \
+                 --force
+
+    # Retrieve the token
+    TOKEN=$(influx auth list --user ${INFLUXDB_SETUP_USERNAME} --host ${INFLUX_HOST} | awk '/active/ {print $3}')
+    echo "InfluxDB token for user ${INFLUXDB_SETUP_USERNAME}: ${TOKEN}"
+
+    # Update the ConfigMap with the token
+    kubectl patch configmap ${INFLUXDB_CONFIGMAP_NAME} \
+      --type=json \
+      -p="[{\"op\":\"replace\",\"path\":\"/data/INFLUXDB_TOKEN\",\"value\":\"${TOKEN}\"}]"
+

@@ -5,6 +5,6 @@ metadata:
 data:
   INFLUXDB_HOST: "influxdb.zplanner.svc.cluster.local"
   INFLUXDB_PORT: "8086"
-  INFLUXDB_TOKEN: "TMhvBvAIPSrVBm83kqfwhtpgbtKojCjaMYmSGAG4eHn-oIUFIg9BenW-an8_PHD24k_46kd9iW1TPhvqxJsTEQ=="
+  INFLUXDB_TOKEN: "Paste me from the GUI"
   INFLUXDB_ORG: "zplanner"
   INFLUXDB_BUCKET: "zplanner"
