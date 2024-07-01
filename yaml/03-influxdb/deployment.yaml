@@ -46,16 +46,17 @@ spec:
           volumeMounts:
             - name: influxdb-storage
               mountPath: /var/lib/influxdb2
-      volumes:
-        - name: influxdb-storage
-          persistentVolumeClaim:
-            claimName: influxdb-pvc
-      readinessProbe:
+          readinessProbe:
             httpGet:
               path: /ping
               port: 8086
             initialDelaySeconds: 10
             periodSeconds: 10
+      volumes:
+        - name: influxdb-storage
+          persistentVolumeClaim:
+            claimName: influxdb-pvc
+
 
 ---
 apiVersion: v1

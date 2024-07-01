@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: influxdb-config
 data:
-  INFLUXDB_HOST: "influxdb.zplanner.svc.cluster.local"
+  INFLUXDB_HOST: "influxdb"
   INFLUXDB_PORT: "8086"
   INFLUXDB_TOKEN: "Paste me from the GUI"
   INFLUXDB_ORG: "zplanner"

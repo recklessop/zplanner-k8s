@@ -7,10 +7,10 @@ data:
     #!/bin/bash
     set -e
     INFLUX_HOST=http://localhost:8086
-    INFLUXDB_SETUP_USERNAME=zplanner
-    INFLUXDB_SETUP_PASSWORD=zplanner
-    INFLUXDB_SETUP_ORG=zplanner
-    INFLUXDB_SETUP_BUCKET=zplanner
+    INFLUXDB_SETUP_USERNAME=myuser
+    INFLUXDB_SETUP_PASSWORD=mypassword
+    INFLUXDB_SETUP_ORG=default-org
+    INFLUXDB_SETUP_BUCKET=default-bucket
     INFLUXDB_CONFIGMAP_NAME=influxdb-config
 
     while ! curl -s ${INFLUX_HOST}/ping; do
@@ -18,19 +18,20 @@ data:
       sleep 5
     done
 
-    influx setup --username ${INFLUXDB_SETUP_USERNAME} \
-                 --password ${INFLUXDB_SETUP_PASSWORD} \
-                 --org ${INFLUXDB_SETUP_ORG} \
-                 --bucket ${INFLUXDB_SETUP_BUCKET} \
-                 --host ${INFLUX_HOST} \
-                 --force
+    # Run the setup command and capture the output
+    SETUP_OUTPUT=$(influx setup --username ${INFLUXDB_SETUP_USERNAME} \
+                                --password ${INFLUXDB_SETUP_PASSWORD} \
+                                --org ${INFLUXDB_SETUP_ORG} \
+                                --bucket ${INFLUXDB_SETUP_BUCKET} \
+                                --host ${INFLUX_HOST} \
+                                --force \
+                                --json)
 
-    # Retrieve the token
-    TOKEN=$(influx auth list --user ${INFLUXDB_SETUP_USERNAME} --host ${INFLUX_HOST} | awk '/active/ {print $3}')
+    # Extract the token from the setup output
+    TOKEN=$(echo ${SETUP_OUTPUT} | jq -r '.auth.token')
     echo "InfluxDB token for user ${INFLUXDB_SETUP_USERNAME}: ${TOKEN}"
 
     # Update the ConfigMap with the token
     kubectl patch configmap ${INFLUXDB_CONFIGMAP_NAME} \
       --type=json \
       -p="[{\"op\":\"replace\",\"path\":\"/data/INFLUXDB_TOKEN\",\"value\":\"${TOKEN}\"}]"
-
