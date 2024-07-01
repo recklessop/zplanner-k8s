@@ -1,0 +1,17 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: zp-queue-monitor-scaledobject
+  namespace: zplanner
+spec:
+  scaleTargetRef:
+    name: zp-queue-monitor
+  minReplicaCount: 1
+  maxReplicaCount: 10
+  cooldownPeriod: 10
+  triggers:
+  - type: redis
+    metadata:
+      addressFromEnv: REDIS_SERVER
+      queueLength: "2"  # Scale when there are more than 2 messages in the queue
+      listName: jobQueue

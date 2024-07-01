@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vm-job-pusher
+  namespace: zplanner
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vm-job-pusher
+  template:
+    metadata:
+      labels:
+        app: vm-job-pusher
+    spec:
+      containers:
+        - name: vm-job-pusher
+          image: recklessop/job-creator:latest
+          env:
+            - name: VCENTER_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: vcenter-config
+                  key: VCENTER_HOST
+            - name: VCENTER_USERNAME
+              valueFrom:
+                configMapKeyRef:
+                  name: vcenter-config
+                  key: VCENTER_USERNAME
+            - name: VCENTER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vcenter-secret
+                  key: VCENTER_PASSWORD
+            - name: REDIS_SERVER
+              valueFrom:
+                configMapKeyRef:
+                  name: redis-config
+                  key: REDIS_SERVER
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 30
