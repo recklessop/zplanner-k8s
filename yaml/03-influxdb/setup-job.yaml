@@ -15,15 +15,21 @@ spec:
             - name: shared-data
               mountPath: /shared
         - name: json-parser
-          image: bitnami/minideb
-          command: ["bash", "-c", "apt-get update && apt-get install -y jq && while [ ! -f /shared/setup_output.json ]; do echo 'Waiting for setup output...'; sleep 5; done; TOKEN=$(cat /shared/setup_output.json | jq -r '.auth.token'); echo $TOKEN > /shared/token.txt; echo 'Token extracted and written to /shared/token.txt'"]
+          image: bitnami/kubectl
+          command: ["bash", "-c", "while [ ! -f /shared/setup_output.json ]; do echo 'Waiting for setup output...'; sleep 5; done; TOKEN=$(cat /shared/setup_output.json | jq -r '.auth.token'); kubectl patch configmap influxdb-config --type=json -p='[{\"op\":\"replace\",\"path\":\"/data/INFLUXDB_TOKEN\",\"value\":\"'$TOKEN'\"}]'; echo 'Token written to ConfigMap'"]
           volumeMounts:
             - name: shared-data
               mountPath: /shared
+            - name: kube-config
+              mountPath: /root/.kube/config
+              subPath: config
       volumes:
         - name: setup-script
           configMap:
             name: influxdb-setup-script
         - name: shared-data
           emptyDir: {}
+        - name: kube-config
+          secret:
+            secretName: kube-config
       restartPolicy: OnFailure
