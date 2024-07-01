@@ -2,7 +2,6 @@ apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: zp-queue-monitor-scaledobject
-  namespace: zplanner
 spec:
   scaleTargetRef:
     name: zp-queue-monitor

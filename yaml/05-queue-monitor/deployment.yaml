@@ -2,7 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zp-queue-monitor
-  namespace: zplanner
 spec:
   replicas: 1
   selector:
