@@ -20,15 +20,11 @@ data:
     done
 
     # Run the setup command and capture the output
-    SETUP_OUTPUT=$(influx setup --username ${INFLUXDB_SETUP_USERNAME} \
-                                --password ${INFLUXDB_SETUP_PASSWORD} \
-                                --org ${INFLUXDB_SETUP_ORG} \
-                                --bucket ${INFLUXDB_SETUP_BUCKET} \
-                                --token ${INFLUXDB_SETUP_TOKEN} \
-                                --host ${INFLUX_HOST} \
-                                --force \
-                                --json)
-
-    # Save the output to a shared volume
-    echo ${SETUP_OUTPUT} > /shared/setup_output.json
-    echo "Setup output written to /shared/setup_output.json"
+    influx setup --username ${INFLUXDB_SETUP_USERNAME} \
+            --password ${INFLUXDB_SETUP_PASSWORD} \
+            --org ${INFLUXDB_SETUP_ORG} \
+            --bucket ${INFLUXDB_SETUP_BUCKET} \
+            --token ${INFLUXDB_SETUP_TOKEN} \
+            --host ${INFLUX_HOST} \
+            --force \
+            --json)
