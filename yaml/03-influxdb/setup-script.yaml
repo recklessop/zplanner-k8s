@@ -12,6 +12,7 @@ data:
     INFLUXDB_SETUP_ORG=zplanner
     INFLUXDB_SETUP_BUCKET=zplanner
     INFLUXDB_CONFIGMAP_NAME=influxdb-config
+    INFLUXDB_SETUP_TOKEN=zplannertoken1234567890
 
     while ! curl -s ${INFLUX_HOST}/ping; do
       echo "Waiting for influxdb to be ready..."
@@ -23,6 +24,7 @@ data:
                                 --password ${INFLUXDB_SETUP_PASSWORD} \
                                 --org ${INFLUXDB_SETUP_ORG} \
                                 --bucket ${INFLUXDB_SETUP_BUCKET} \
+                                --token ${INFLUXDB_SETUP_TOKEN} \
                                 --host ${INFLUX_HOST} \
                                 --force \
                                 --json)
