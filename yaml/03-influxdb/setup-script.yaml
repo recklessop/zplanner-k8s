@@ -15,7 +15,7 @@ data:
 
     while ! curl -s ${INFLUX_HOST}/ping; do
       echo "Waiting for influxdb to be ready..."
-      sleep 5
+      sleep 30
     done
 
     # Run the setup command and capture the output
@@ -28,6 +28,7 @@ data:
                                 --json)
 
     # Extract the token from the setup output
+    echo "${SETUP_OUTPUT}"
     TOKEN=$(echo ${SETUP_OUTPUT} | jq -r '.auth.token')
     echo "InfluxDB token for user ${INFLUXDB_SETUP_USERNAME}: ${TOKEN}"
 
