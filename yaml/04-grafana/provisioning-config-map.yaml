@@ -21,8 +21,9 @@ data:
           httpMode: POST
           organization: zplanner
           defaultBucket: zplanner
-          token: zplannertoken1234567890
           version: Flux
+        secureJsonData:
+          token: zplannertoken1234567890
 
 
   dashboards.yml: |
