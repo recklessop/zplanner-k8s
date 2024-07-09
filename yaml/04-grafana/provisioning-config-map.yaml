@@ -15,6 +15,7 @@ data:
         database: zplanner
         user: ""
         password: ""
+        basicAuth: true
         isDefault: true
         jsonData:
           httpMode: POST
