@@ -55,8 +55,8 @@ spec:
           mountPath: /etc/grafana/provisioning/dashboards/dashboards.yml
           subPath: dashboards.yml
         - name: provisioning-dashboard-json-volume
-          mountPath: /etc/grafana/provisioning/dashboards/dashboard.json
-          subPath: dashboard.json
+          mountPath: /etc/grafana/provisioning/dashboards/vm_write_throughput.json
+          subPath: dashboard_vm_write_throughput.json
         env:
         - name: GF_SECURITY_ADMIN_USER
           valueFrom:
@@ -133,8 +133,8 @@ spec:
         configMap:
           name: grafana-provisioning
           items:
-          - key: dashboard.json
-            path: dashboard.json
+          - key: dashboard_vm_write_throughput.json
+            path: vm_write_throughput.json
 
 ---
 
