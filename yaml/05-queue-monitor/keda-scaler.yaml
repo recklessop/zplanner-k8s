@@ -5,12 +5,12 @@ metadata:
 spec:
   scaleTargetRef:
     name: zp-queue-monitor
-  minReplicaCount: 1
+  minReplicaCount: 10
   maxReplicaCount: 10
-  cooldownPeriod: 10
+  cooldownPeriod: 300
   triggers:
   - type: redis
     metadata:
       addressFromEnv: REDIS_SERVER
-      queueLength: "2"  # Scale when there are more than 2 messages in the queue
+      queueLength: "3"  # Scale when there are more than 2 messages in the queue
       listName: jobQueue

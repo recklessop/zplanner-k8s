@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: redis-config
 data:
-  REDIS_SERVER: "redis:6379"
+  REDIS_SERVER: "redis.default.svc.cluster.local:6379"

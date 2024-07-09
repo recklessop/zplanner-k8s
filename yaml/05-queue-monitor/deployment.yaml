@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: zp-queue-monitor
-        image: recklessop/zp-worker:latest
+        image: recklessop/zp-worker:testing16
         env:
         - name: VCENTER_HOST
           valueFrom:
@@ -36,3 +36,5 @@ spec:
             configMapKeyRef:
               name: redis-config
               key: REDIS_SERVER
+        - name: TZ
+          value: "UTC"

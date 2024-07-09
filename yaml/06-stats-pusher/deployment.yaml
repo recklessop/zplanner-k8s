@@ -66,3 +66,5 @@ spec:
               configMapKeyRef:
                 name: influxdb-config
                 key: INFLUXDB_BUCKET
+          - name: TZ
+            value: "UTC"
