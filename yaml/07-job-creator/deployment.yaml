@@ -16,6 +16,11 @@ spec:
         - name: vm-job-pusher
           image: recklessop/job-creator:latest
           env:
+            - name: PROVISIONED
+              valueFrom:
+                configMapKeyRef:
+                  name: vcenter-config
+                  key: PROVISIONED
             - name: VCENTER_HOST
               valueFrom:
                 configMapKeyRef:
