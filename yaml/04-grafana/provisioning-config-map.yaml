@@ -6,7 +6,6 @@ metadata:
 data:
   datasource.yml: |
     apiVersion: 1
-
     datasources:
       - name: InfluxDB
         type: influxdb
@@ -23,7 +22,6 @@ data:
 
   dashboards.yml: |
     apiVersion: 1
-
     providers:
       - name: 'default'
         orgId: 1
