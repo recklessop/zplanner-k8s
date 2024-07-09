@@ -6,19 +6,23 @@ metadata:
 data:
   datasource.yml: |
     apiVersion: 1
+
     datasources:
       - name: InfluxDB
         type: influxdb
         access: proxy
-        url: http://influxdb:8086
+        url: http://influxdb.default.svc.cluster.local:8086
         database: zplanner
         user: ""
         password: ""
         isDefault: true
         jsonData:
-          token: zplannertoken1234567890
+          httpMode: POST
           organization: zplanner
           defaultBucket: zplanner
+          token: zplannertoken1234567890
+          version: Flux
+
 
   dashboards.yml: |
     apiVersion: 1
