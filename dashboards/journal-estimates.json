@@ -81,7 +81,7 @@
               "type": "influxdb",
               "uid": "edo3fuvokhpmod"
             },
-            "query": "from(bucket: \"zptest\")\n  |> range(start: -${timeRangeDays}, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vm_stats\")\n  |> filter(fn: (r) => r[\"_field\"] == \"kbWriteAvg\")\n  |> filter(fn: (r) => contains(value: r[\"vm\"], set: ${vmname:json}))\n  |> map(fn: (r) => ({ r with _value: r._value * 60.0 }))\n  |> group(columns: [\"disk\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: sum, createEmpty: false)\n  |> sum(column: \"_value\")\n  |> yield(name: \"total_kb_written_per_disk\")",
+            "query": "from(bucket: \"zplanner\")\n  |> range(start: -${timeRangeDays}, stop: now())\n  |> filter(fn: (r) => r[\"_measurement\"] == \"vm_stats\")\n  |> filter(fn: (r) => r[\"_field\"] == \"kbWriteAvg\")\n  |> filter(fn: (r) => contains(value: r[\"vm\"], set: ${vmname:json}))\n  |> map(fn: (r) => ({ r with _value: r._value * 60.0 }))\n  |> group(columns: [\"disk\"])\n  |> aggregateWindow(every: v.windowPeriod, fn: sum, createEmpty: false)\n  |> sum(column: \"_value\")\n  |> yield(name: \"total_kb_written_per_disk\")",
             "refId": "A"
           }
         ],
@@ -113,14 +113,14 @@
             "type": "influxdb",
             "uid": "edo3fuvokhpmod"
           },
-          "definition": "from(bucket: \"zptest\")\n  |> range(start: -1y)  // You can adjust the time range as needed\n  |> group(columns: [\"vm\"])\n  |> distinct(column: \"vm\")\n  |> keep(columns: [\"vm\"])",
+          "definition": "from(bucket: \"zplanner\")\n  |> range(start: -1y)  // You can adjust the time range as needed\n  |> group(columns: [\"vm\"])\n  |> distinct(column: \"vm\")\n  |> keep(columns: [\"vm\"])",
           "hide": 0,
           "includeAll": true,
           "label": "VM Name",
           "multi": true,
           "name": "vmname",
           "options": [],
-          "query": "from(bucket: \"zptest\")\n  |> range(start: -1y)  // You can adjust the time range as needed\n  |> group(columns: [\"vm\"])\n  |> distinct(column: \"vm\")\n  |> keep(columns: [\"vm\"])",
+          "query": "from(bucket: \"zplanner\")\n  |> range(start: -1y)  // You can adjust the time range as needed\n  |> group(columns: [\"vm\"])\n  |> distinct(column: \"vm\")\n  |> keep(columns: [\"vm\"])",
           "refresh": 1,
           "regex": "",
           "skipUrlSync": false,
