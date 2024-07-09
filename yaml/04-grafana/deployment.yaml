@@ -48,14 +48,14 @@ spec:
         volumeMounts:
         - name: grafana-storage
           mountPath: /var/lib/grafana
-        - name: datasource-volume
-          mountPath: /etc/grafana/provisioning/datasources
+        - name: provisioning-datasource-volume
+          mountPath: /etc/grafana/provisioning/datasources/datasource.yml
           subPath: datasource.yml
-        - name: dashboard-provisioning-volume
-          mountPath: /etc/grafana/provisioning/dashboards
+        - name: provisioning-dashboards-volume
+          mountPath: /etc/grafana/provisioning/dashboards/dashboards.yml
           subPath: dashboards.yml
-        - name: dashboard-json-volume
-          mountPath: /etc/grafana/provisioning/dashboards
+        - name: provisioning-dashboard-json-volume
+          mountPath: /etc/grafana/provisioning/dashboards/dashboard.json
           subPath: dashboard.json
         env:
         - name: GF_SECURITY_ADMIN_USER
@@ -117,19 +117,19 @@ spec:
       - name: grafana-storage
         persistentVolumeClaim:
           claimName: grafana-pvc
-      - name: datasource-volume
+      - name: provisioning-datasource-volume
         configMap:
           name: grafana-provisioning
           items:
           - key: datasource.yml
             path: datasource.yml
-      - name: dashboard-provisioning-volume
+      - name: provisioning-dashboards-volume
         configMap:
           name: grafana-provisioning
           items:
           - key: dashboards.yml
             path: dashboards.yml
-      - name: dashboard-json-volume
+      - name: provisioning-dashboard-json-volume
         configMap:
           name: grafana-provisioning
           items:
