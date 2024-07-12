@@ -15,6 +15,7 @@ spec:
       containers:
       - name: zp-queue-monitor
         image: recklessop/zp-worker:testing16
+        imagePullPolicy: IfNotPresent
         env:
         - name: VCENTER_HOST
           valueFrom:
