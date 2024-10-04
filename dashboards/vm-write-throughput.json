@@ -24,7 +24,7 @@
       {
         "datasource": {
           "type": "influxdb",
-          "uid": "edo3fuvokhpmod"
+          "default": true
         },
         "fieldConfig": {
           "defaults": {
